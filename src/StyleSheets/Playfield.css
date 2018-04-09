@@ -1,0 +1,44 @@
+.maxWidth{
+    width: 100%
+}
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: lightgray;
+   color: black;
+   text-align: center;
+}
+
+.align-center{
+    align-content: center;
+    text-align: center;
+}
+
+.cardheight{
+    max-height: 143px;
+    overflow: auto;
+}
+
+.no-padding {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.bottom-margin {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.card-size-minimum{
+    min-width:120px;
+    min-height:150px;
+    max-width:120px;
+    max-height:150px;    
+}

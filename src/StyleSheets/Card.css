@@ -1,0 +1,10 @@
+.Card{
+    opacity: 1;
+}
+
+.CardTapped{
+    opacity: 0.4;
+}
+img{
+    width:100px;
+}

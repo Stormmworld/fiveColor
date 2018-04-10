@@ -156,7 +156,7 @@ class Playfield extends Component {
                                         <Graveyard cards={this.state.graveYard} />
                                     </Col>
                                     <Col xs={9} sm={9} md={9} lg={9}>
-                                        <Lands lands={this.state.lands} />
+                                        {this.state.lands.count > 0 && <Lands lands={this.state.lands} />}
                                     </Col>
                                 </Row>
                             </Grid>

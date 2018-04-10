@@ -1,30 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap'
 import '../StyleSheets/Lands.css';
 import Card from './Card.js'
 
-class Lands extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    };
-
-    cardClicked(card){
-        this.props.addMana(card);
-    }
-    
-    render() {
-        return (
-            <Grid>
-                <Row className='lands-container'>
-                    {this.props.lands ? this.props.lands.map(card => (
-                        <Card card={card} cardClicked={this.cardClicked.bind(this,card)} />
-                    )) : null}
-                </Row>
-            </Grid>
-        );
-    }
+const Lands = (props) => {
+    return (
+        <Grid>
+            <Row className='lands-container'>
+                {this.props.lands.map(card => <Card card={card} cardClicked={() => props.addMana(card)} />)}
+            </Row>
+        </Grid>
+    );
 }
-
 export default Lands;

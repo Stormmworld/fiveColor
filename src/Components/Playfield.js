@@ -140,10 +140,10 @@ class Playfield extends Component {
 
     render() {
         return (
-            <div className='maxWidth col-sm-12 no-padding no-margin'>
-                <Grid >
+            <div className='col-sm-12 no-padding no-margin'>
+                <Grid>
                     <Row>
-                        <Col>
+                        <Col xs={12} sm={12} md={12} lg={12} >
                             <Grid>
                                 <Row>
                                     <Col xs={12} sm={12} md={12} lg={12}>
@@ -151,13 +151,11 @@ class Playfield extends Component {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col xs={1} sm={1} md={1} lg={1}>
+                                    <Col className="library-Container" xs={3} sm={3} md={3} lg={3}>
                                         <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
-                                    </Col>
-                                    <Col xs={1} sm={1} md={1} lg={1}>
                                         <Graveyard cards={this.state.graveYard} />
                                     </Col>
-                                    <Col xs={10} sm={10} md={10} lg={10}>
+                                    <Col xs={9} sm={9} md={9} lg={9}>
                                         <Lands lands={this.state.lands} />
                                     </Col>
                                 </Row>
@@ -165,13 +163,13 @@ class Playfield extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
+                        <Col xs={12} sm={12} md={12} lg={12} >
                             <Battlefield className="col-sm-12 no-padding no-margin" />
                         </Col>
                     </Row>
                 </Grid>
                 <div className='footer'>
-                    <Hand className="" hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
+                    <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
                 </div>
             </div>
         );

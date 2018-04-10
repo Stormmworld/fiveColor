@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Row, Col } from 'react-bootstrap'
 import '../StyleSheets/Lands.css';
 import Card from './Card.js'
 
@@ -15,13 +16,13 @@ class Lands extends Component {
     
     render() {
         return (
-            <div className='col-sm-8'>
-                <div className='col-sm-12 maxWidth cardheight'>
+            <Grid>
+                <Row className='lands-container'>
                     {this.props.lands ? this.props.lands.map(card => (
                         <Card card={card} cardClicked={this.cardClicked.bind(this,card)} />
                     )) : null}
-                </div>
-            </div>
+                </Row>
+            </Grid>
         );
     }
 }

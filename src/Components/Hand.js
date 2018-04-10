@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Row, Col } from 'react-bootstrap'
 import '../StyleSheets/Hand.css';
 import Card from './Card.js'
 
@@ -26,14 +27,13 @@ class Hand extends Component {
 
     render() {
         return (
-            <div>
-            <div className='col-sm-12'>Hand</div>
-            <div className='col-sm-12 maxWidth cardheight'>
+            <Grid>
+                <Row className='hand-container'>
                 {this.props.hand ? this.props.hand.map(card => (
                     <Card card={card} cardClicked={this.props.cardClicked}/>
                 )) : null}
-                </div>
-            </div>
+                </Row>
+            </Grid>
         );
     }
 }

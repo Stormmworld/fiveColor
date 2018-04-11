@@ -10,8 +10,9 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    updateDeck: (deck) => {
-      dispatch(updateDeck(deck));
+    updateDeck: (deck) => { dispatch(updateDeck(deck));
+    },
+    RetrieveDeck: (deckId)=>{dispatch(RetrieveDeck(deckId));
     }
   };
 };

@@ -177,7 +177,7 @@ class Playfield extends Component {
                             </Grid>
                         </Col>
                     </Row>
-                    <Row>they 
+                    <Row> 
                         <Col xs={12} sm={12} md={12} lg={12} >
                             <Battlefield className="col-sm-12 no-padding no-margin" />
                         </Col>

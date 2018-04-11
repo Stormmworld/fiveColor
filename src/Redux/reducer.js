@@ -1,8 +1,8 @@
 import { RESET_STATE, GET_DECK } from './../Constants/ActionTypes';
-import { getDeck } from './../Mocker';
+//import { getDeck } from './../Mocker';
 
 const initialState = {
-  deck: getDeck()
+  deck: []//getDeck()
 };
 
 const Reducer = function Reducer(state = initialState, action) {

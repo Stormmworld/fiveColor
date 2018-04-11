@@ -15,10 +15,7 @@ class Graveyard extends Component {
             graveYardImage = this.props.cards[this.props.cards.length - 1].image;
 
         return (
-            <div id="graveyard-container col-sm-1 no-padding no-margin" >
-                <img className="graveYardTopCard" src={graveYardImage} alt=''></img>
-                <div className="no-padding  no-margin align-center">({this.props.cards ? this.props.cards.length : '0'}) Cards</div>
-            </div>
+            <img className="graveYardTopCard" src={graveYardImage} alt=''></img>
         );
     }
 }

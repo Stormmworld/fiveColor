@@ -10,19 +10,17 @@ class Lands extends Component {
         }
     };
 
-    cardClicked(card){
+    cardClicked(card) {
         this.props.addMana(card);
     }
-    
+
     render() {
         return (
-            <Grid>
-                <Row className='lands-container'>
-                    {this.props.lands ? this.props.lands.map(card => (
-                        <Card card={card} cardClicked={this.cardClicked.bind(this,card)} />
-                    )) : null}
-                </Row>
-            </Grid>
+            <Col className='lands-container'>
+                {this.props.lands ? this.props.lands.map(card => (
+                    <Card card={card} cardClicked={this.cardClicked.bind(this, card)} />
+                )) : null}
+            </Col>
         );
     }
 }

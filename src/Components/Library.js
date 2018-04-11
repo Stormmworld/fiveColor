@@ -12,10 +12,7 @@ class Library extends Component {
         if(this.props.showTopCard)
             imageSource = this.props.cards[0].image;
         return (
-            <div className="col-sm-1 card-size-minimum">
-                <img alt='Library Empty' src={imageSource} onClick={this.cardClicked.bind(this)} />
-                <div className="no-padding  no-margin align-center">({this.props.cards.length}) Cards</div>
-            </div>
+            <img alt='Library Empty' src={imageSource} onClick={this.cardClicked.bind(this)} />
         );
     }
 }

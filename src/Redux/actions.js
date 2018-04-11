@@ -1,12 +1,13 @@
 import { RESET_STATE, GET_DECK, UPDATE_DECK } from '../Constants/ActionTypes';
 
 export const updateDeck = () => ({
-  type: GET_DECK
+  type: UPDATE_DECK
 });
 export const resetState = () => ({
   type: RESET_STATE
 });
-export function ApiGetTeams() {
+
+export function getDeck() {
   return dispatch => {
       return fetch("http://72.49.137.37/fivecolorapi/api/deck/1")
       .then((response) => {

@@ -13,7 +13,7 @@ class Playfield extends Component {
         super(props);
         this.state = {
             DrawCount: 1,
-            deck: this.props.deck,
+            deck: this.shuffleDeck(this.props.deck),
             showtopCard: false,
             hand: [],
             lands: [],
@@ -25,6 +25,21 @@ class Playfield extends Component {
             manaPool: [],
         }
     };
+
+    shuffleDeck(deck) {
+        var shuffledCards = [];
+        var loopCount = deck.length;
+        for (var j = 0; j < 3; j++)//triple shuffle
+        {
+            for (var i = 0; i < loopCount; i++) {
+                var index = Math.floor(Math.random() * deck.length);
+                var card = deck[index];
+                deck.splice(index, 1);
+                shuffledCards.push(card);
+            }
+        }
+        return shuffledCards;
+    }
 
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;

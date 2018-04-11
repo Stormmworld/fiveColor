@@ -8,18 +8,11 @@ export const resetState = () => ({
 });
 export function ApiGetTeams() {
   return dispatch => {
-      return axios.get("http://elementalserver.servehttp.com/NFLScheduleApi/api/teams")
+      return fetch("http://72.49.137.37/fivecolorapi/api/deck/1")
       .then((response) => {
           dispatch({
               type: "ApiGetTeams",
-              payload: response.data
-          })
-      })
-      .catch((error) => {
-          dispatch ({
-              type: "axiosException",
-              payload: error,
-              customMessage: "Error while getting teams from api call"
+              payload: response.json()
           })
       })
   }

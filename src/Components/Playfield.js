@@ -6,7 +6,6 @@ import Library from './Library.js'
 import Graveyard from './Graveyard.js'
 import Lands from './Lands.js'
 import Hand from './Hand.js'
-import Mana from './Mana.js'
 import Phases from './Phases.js'
 
 class Playfield extends Component {
@@ -14,7 +13,7 @@ class Playfield extends Component {
         super(props);
         this.state = {
             DrawCount: 1,
-            deck: this.props.deck,
+            deck: this.shuffleDeck(this.props.deck),
             showtopCard: false,
             hand: [],
             lands: [],
@@ -23,10 +22,24 @@ class Playfield extends Component {
             subphase: 'untap',
             landsPlayedThisTurn: 0,
             landsPerTurn: 1,
-            life:20,
             manaPool: [],
         }
     };
+
+    shuffleDeck(deck) {
+        var shuffledCards = [];
+        var loopCount = deck.length;
+        for (var j = 0; j < 3; j++)//triple shuffle
+        {
+            for (var i = 0; i < loopCount; i++) {
+                var index = Math.floor(Math.random() * deck.length);
+                var card = deck[index];
+                deck.splice(index, 1);
+                shuffledCards.push(card);
+            }
+        }
+        return shuffledCards;
+    }
 
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;
@@ -34,7 +47,7 @@ class Playfield extends Component {
         var cardIndex = currentHand.findIndex(o => o.Name === card.Name);
         if (card.Type === 'Land') {
             if (this.state.landsPlayedThisTurn < this.state.landsPerTurn) {
-                //alert(cardIndex);
+                alert(cardIndex);
                 currentHand.splice(cardIndex, 1);
                 currentLands.push(card);
             }
@@ -152,28 +165,13 @@ class Playfield extends Component {
                                         <Phases phase={this.state.phase} subphase={this.state.subphase} stepComplete={this.StepCompleted.bind(this)} />
                                     </Col>
                                 </Row>
-                                <Row className="libraryGraveyard-container">
-                                    <Col className="libraryGraveyard-container" className="library-Container" xs={3} sm={3} md={3} lg={3}>
-                                        <Col xs={6} sm={6} md={6} lg={6}>
-                                            <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
-                                        </Col>
-                                        <Col xs={6} sm={6} md={6} lg={6}>
-                                            <Graveyard cards={this.state.graveYard} />
-                                        </Col>
+                                <Row>
+                                    <Col className="library-Container" xs={3} sm={3} md={3} lg={3}>
+                                        <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
+                                        <Graveyard cards={this.state.graveYard} />
                                     </Col>
                                     <Col xs={9} sm={9} md={9} lg={9}>
-                                        <Lands lands={this.state.lands} />
-                                    </Col>
-                                    <Col xs={3} sm={3} md={3} lg={3}>
-                                        <Col className="align-center" xs={6} sm={6} md={6} lg={6}>
-                                            ({this.state.deck.length}) Cards
-                                        </Col>
-                                        <Col className="align-center" xs={6} sm={6} md={6} lg={6}>
-                                            ({this.state.graveYard.length}) Cards
-                                        </Col>
-                                    </Col>
-                                    <Col xs={9} sm={9} md={9} lg={9}>
-                                        Remaining Life: {this.state.life}
+                                        {this.state.lands.count > 0 && <Lands lands={this.state.lands} />}
                                     </Col>
                                 </Row>
                             </Grid>

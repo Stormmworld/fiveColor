@@ -26,6 +26,11 @@ class Playfield extends Component {
         }
     };
 
+    componentWillReceiveProps(nextProps){
+        if(this.props.deck.length < 1)
+            this.setState({ deck: this.shuffleDeck(nextProps.deck)}) 
+    }
+
     shuffleDeck(deck) {
         var shuffledCards = [];
         var loopCount = deck.length;
@@ -37,6 +42,8 @@ class Playfield extends Component {
                 deck.splice(index, 1);
                 shuffledCards.push(card);
             }
+            deck = shuffledCards;
+            shuffledCards = [];
         }
         return shuffledCards;
     }

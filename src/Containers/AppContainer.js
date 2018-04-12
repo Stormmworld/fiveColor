@@ -1,6 +1,6 @@
 import App from './../Components/App';
 import { connect } from 'react-redux';
-import { updateDeck } from '../Redux/actions';
+import { updateDeck, retrieveDeck} from '../Redux/actions';
 import { getDeck } from '../Selectors/AppSelectors';
 
 const mapStateToProps = state => {
@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => {
   return {
     updateDeck: (deck) => { dispatch(updateDeck(deck));
     },
-    RetrieveDeck: (deckId)=>{dispatch(RetrieveDeck(deckId));
+    retrieveDeck: (deckId)=>{dispatch(retrieveDeck(deckId));
     }
   };
 };

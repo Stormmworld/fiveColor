@@ -77,7 +77,7 @@ class Playfield extends Component {
         var currentdeck = this.state.deck;
         for (var i = 0; i < this.state.DrawCount; i++) {
             if (currentdeck.length === 0) {
-                alert('You have no cards to draw');
+                //alert('You have no cards to draw');
                 this.Death();
                 break;
             }
@@ -154,6 +154,7 @@ class Playfield extends Component {
     }
 
     render() {
+        //alert(this.state.lands.length);
         return (
             <div className='col-sm-12 no-padding no-margin'>
                 <Grid>
@@ -171,13 +172,13 @@ class Playfield extends Component {
                                         <Graveyard cards={this.state.graveYard} />
                                     </Col>
                                     <Col xs={9} sm={9} md={9} lg={9}>
-                                        {this.state.lands.count > 0 && <Lands lands={this.state.lands} />}
+                                        {this.state.lands.length > 0 && <Lands lands={this.state.lands} />}
                                     </Col>
                                 </Row>
                             </Grid>
                         </Col>
                     </Row>
-                    <Row> 
+                    <Row>
                         <Col xs={12} sm={12} md={12} lg={12} >
                             <Battlefield className="col-sm-12 no-padding no-margin" />
                         </Col>

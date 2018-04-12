@@ -1,8 +1,8 @@
-import { RESET_STATE, GET_DECK } from './../Constants/ActionTypes';
-//import { getDeck } from './../Mocker';
+import { RETRIEVE_DECK, RESET_STATE, GET_DECK } from './../Constants/ActionTypes';
+import { getDeck } from './../Mocker';
 
 const initialState = {
-  deck: []//getDeck()
+  deck: getDeck()
 };
 
 const Reducer = function Reducer(state = initialState, action) {
@@ -11,6 +11,13 @@ const Reducer = function Reducer(state = initialState, action) {
       return {
         ...state,
         deck: action.deck
+      };
+    }
+    case RETRIEVE_DECK: {
+      alert(action);
+      return {
+        ...state,
+        deck: action.payload.cards
       };
     }
     case RESET_STATE: {

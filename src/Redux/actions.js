@@ -7,15 +7,13 @@ export const resetState = () => ({
   type: RESET_STATE
 });
 
-export function RetrieveDeck(deckId) {
+export function retrieveDeck(deckId) {
   return dispatch => {
     return fetch("http://72.49.137.37/fivecolorapi/api/deck/" + deckId)
       .then((response) => {
-        var deck = response.json()
-        alert(deck);
         dispatch({
           type: RETRIEVE_DECK,
-          payload: deck.cards
+          payload: response.json()
         })
       })
   }

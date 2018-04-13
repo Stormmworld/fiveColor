@@ -13,7 +13,7 @@ class Playfield extends Component {
         super(props);
         this.state = {
             DrawCount: 1,
-            deck: this.shuffleDeck(this.props.deck),
+            deck: this.shuffleDeck(this.props.deck,3),
             showtopCard: false,
             hand: [],
             lands: [],
@@ -26,26 +26,21 @@ class Playfield extends Component {
         }
     };
 
-    componentWillReceiveProps(nextProps){
-        if(this.props.deck.length < 1)
-            this.setState({ deck: this.shuffleDeck(nextProps.deck)}) 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.deck.length < 1)
+            this.setState({ deck: this.shuffleDeck(nextProps.deck,3) })
     }
 
-    shuffleDeck(deck) {
+    shuffleDeck(deck, shuffleCount) {
         var shuffledCards = [];
         var loopCount = deck.length;
-        for (var j = 0; j < 3; j++)//triple shuffle
-        {
-            for (var i = 0; i < loopCount; i++) {
-                var index = Math.floor(Math.random() * deck.length);
-                var card = deck[index];
-                deck.splice(index, 1);
-                shuffledCards.push(card);
-            }
-            deck = shuffledCards;
-            shuffledCards = [];
+        for (var i = 0; i < loopCount; i++) {
+            var index = Math.floor(Math.random() * deck.length);
+            var card = deck[index];
+            deck.splice(index, 1);
+            shuffledCards.push(card);
         }
-        return shuffledCards;
+        return shuffleCount === 0? shuffledCards: this.shuffleDeck(shuffledCards, shuffleCount -1);
     }
 
     CardClickedFromHand(card) {
@@ -178,8 +173,8 @@ class Playfield extends Component {
                                         <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
                                         <Graveyard cards={this.state.graveYard} />
                                     </Col>
-                                    <Col xs={9} sm={9} md={9} lg={9}>
-                                        {this.state.lands.length > 0 && <Lands lands={this.state.lands} />}
+                                    <Col className='lands-container no-padding no-margin' xs={9} sm={9} md={9} lg={9}>
+                                        <Lands lands={this.state.lands} addMana={this.ManaGenerated.bind(this)} />
                                     </Col>
                                 </Row>
                             </Grid>

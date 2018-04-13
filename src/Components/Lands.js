@@ -5,11 +5,9 @@ import Card from './Card.js'
 
 const Lands = function(props){
     return (
-        <Grid>
-            <Row className='lands-container'>
+            <Col xs={12} sm={12} md={12} lg={12}>
                 {props.lands.map(card => <Card card={card} cardClicked={() => props.addMana(card)} />)}
-            </Row>
-        </Grid>
+            </Col>
     );
 }
 export default Lands;

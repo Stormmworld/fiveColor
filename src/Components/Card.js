@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
 import '../StyleSheets/Card.css';
 
-class Card extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tapped: false,
-            card: this.props.card,
-        }
-    };
-
-    render() {
+const Card = function (props) {
         return (
-                <img alt='' className={this.state.tapped ? "CardTapped" : "Card"} src={this.state.card.image} onClick={()=>this.props.cardClicked(this.state.card)} />
+            <img alt='' className={props.tapped ? "CardTapped" : "Card"} src={props.card.image} onClick={() => props.cardClicked(props.card)} />
         );
-    }
 }
 
 export default Card;

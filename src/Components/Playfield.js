@@ -13,7 +13,7 @@ class Playfield extends Component {
         super(props);
         this.state = {
             DrawCount: 1,
-            deck: this.shuffleDeck(this.props.deck,3),
+            deck: this.shuffleDeck(this.props.deck, 3),
             showtopCard: false,
             hand: [],
             lands: [],
@@ -23,12 +23,17 @@ class Playfield extends Component {
             landsPlayedThisTurn: 0,
             landsPerTurn: 1,
             manaPool: [],
+            battleFieldCards: [],
         }
     };
 
     componentWillReceiveProps(nextProps) {
         if (this.props.deck.length < 1)
-            this.setState({ deck: this.shuffleDeck(nextProps.deck,3) })
+            this.setState({ deck: this.shuffleDeck(nextProps.deck, 3) })
+    }
+
+    battleFieldCardClicked(card){
+        alert('the card ' + card.Name + ' was clicked in the battlefield')
     }
 
     shuffleDeck(deck, shuffleCount) {
@@ -40,34 +45,66 @@ class Playfield extends Component {
             deck.splice(index, 1);
             shuffledCards.push(card);
         }
-        return shuffleCount === 0? shuffledCards: this.shuffleDeck(shuffledCards, shuffleCount -1);
+        return shuffleCount === 0 ? shuffledCards : this.shuffleDeck(shuffledCards, shuffleCount - 1);
     }
 
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;
         var currentLands = this.state.lands;
+        var currentBattlefield = this.state.battleFieldCards;
         var cardIndex = currentHand.findIndex(o => o.Name === card.Name);
-        if (card.Type === 'Land') {
+        if (card.Types.find(o => o === 'Land')) {
             if (this.state.landsPlayedThisTurn < this.state.landsPerTurn) {
-                alert(cardIndex);
+                //alert(cardIndex);
                 currentHand.splice(cardIndex, 1);
                 currentLands.push(card);
             }
             else
                 alert('You can only play ' + this.state.landsPerTurn + ' lands per turn.');
         }
-        else {//verify enough mana has been collected of the appropriate type before proceeding
-
+        else if (this.manaPoolSupportsCastingCost(card.ManaCost)) {//verify enough mana has been collected of the appropriate type before proceeding
+            currentHand.splice(cardIndex, 1);
+            currentBattlefield.push(card);
         }
 
         this.setState({
             hand: currentHand,
-            lands: currentLands
+            lands: currentLands,
+            battleFieldCards: currentBattlefield
         });
     }
+    manaPoolSupportsCastingCost(ManaCost) {
+        for (var i = 0; i < ManaCost.length; i++) {
+            if (ManaCost[i] === "0") { return true; }
+            var requiredMana = ManaCost[i].split(',');
+            var manapool = this.state.manaPool;
+            var success = true;
+            for (var j = requiredMana.length; j > -1; j--) {
+                if (manapool.length === 0)
+                    success = false;
+                var indexOfMana = manapool.findIndex(o => o.color === requiredMana[j]);
+                if (indexOfMana) {
+                    manapool.splice(indexOfMana, 1);
+                }
+                else
+                    success = false;
+            }
+            if(success)
+                return true;
+        }
+        return false;
+    }
 
-    ManaGenerated(mana) {
 
+    ManaGenerated(manaProducer) {
+        var currentManaPool = this.state.manaPool;
+        if (manaProducer.ManaProduction.length === 1) {
+            currentManaPool.Add(manaProducer.ManaProduction[0]);
+        }
+        else if (manaProducer.ManaProduction.length > 1) {
+            alert('add selection of mana to produce');
+        }
+        this.setState({ manaPool: currentManaPool });
     }
 
     Death() {
@@ -182,7 +219,7 @@ class Playfield extends Component {
                     </Row>
                     <Row>
                         <Col xs={12} sm={12} md={12} lg={12} >
-                            <Battlefield className="col-sm-12 no-padding no-margin" />
+                            <Battlefield className="col-sm-12 no-padding no-margin" cards = {this.state.battleFieldCards} cardClicked={this.battleFieldCardClicked} />
                         </Col>
                     </Row>
                 </Grid>

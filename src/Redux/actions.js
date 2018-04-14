@@ -9,8 +9,8 @@ export const resetState = () => ({
 
 export function retrieveDeck(deckId) {
   return dispatch => {
-    return fetch("http://localhost:54900/api/deck/1")//"http://72.49.137.37/fivecolorapi/api/deck/" + deckId)
-      .then((response) => {
+    return fetch("http://72.49.137.37/fivecolorapi/api/deck/" + deckId)//"http://localhost:54900/api/deck/1")
+    .then((response) => {
         //alert(response;
         dispatch({
           type: RETRIEVE_DECK,

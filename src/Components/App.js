@@ -9,7 +9,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className='app-container' >
         {/* {this.props.deck && <Playfield deck={this.props.deck} />}*/}
         {this.props.deck && <Playfield deck={this.props.deck} />} 
       </div>

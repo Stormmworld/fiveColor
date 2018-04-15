@@ -40,3 +40,8 @@
     max-width:120px;
     max-height:150px;    
 }
+
+.playfield-container{
+    display: inline-flex;
+    height: 100%;
+}

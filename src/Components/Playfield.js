@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap'
+import Modal from './Modal.js'
 import '../StyleSheets/Playfield.css';
 import Battlefield from './BattleField.js'
 import Library from './Library.js'
@@ -7,6 +8,7 @@ import Graveyard from './Graveyard.js'
 import Lands from './Lands.js'
 import Hand from './Hand.js'
 import Phases from './Phases.js'
+import ManaPool from './ManaPool.js'
 
 class Playfield extends Component {
     constructor(props) {
@@ -32,7 +34,7 @@ class Playfield extends Component {
             this.setState({ deck: this.shuffleDeck(nextProps.deck, 3) })
     }
 
-    battleFieldCardClicked(card){
+    battleFieldCardClicked(card) {
         alert('the card ' + card.Name + ' was clicked in the battlefield')
     }
 
@@ -89,7 +91,7 @@ class Playfield extends Component {
                 else
                     success = false;
             }
-            if(success)
+            if (success)
                 return true;
         }
         return false;
@@ -99,10 +101,10 @@ class Playfield extends Component {
     ManaGenerated(manaProducer) {
         var currentManaPool = this.state.manaPool;
         if (manaProducer.ManaProduction.length === 1) {
-            currentManaPool.Add(manaProducer.ManaProduction[0]);
+            currentManaPool.push(manaProducer.ManaProduction[0]);
         }
         else if (manaProducer.ManaProduction.length > 1) {
-            alert('add selection of mana to produce');
+            alert('learn about modals and launch mana selection')
         }
         this.setState({ manaPool: currentManaPool });
     }
@@ -130,6 +132,10 @@ class Playfield extends Component {
             deck: currentdeck,
             hand: cardsDrawn,
         });
+    }
+
+    manaSelected(colors) {
+        alert(colors);
     }
 
     StepCompleted() {
@@ -195,8 +201,8 @@ class Playfield extends Component {
     render() {
         //alert(this.state.lands.length);
         return (
-            <div className='col-sm-12 no-padding no-margin'>
-                <Grid>
+            <div className='col-sm-12 no-padding no-margin fill-area'>
+                <Grid className="fill-area">
                     <Row>
                         <Col xs={12} sm={12} md={12} lg={12} >
                             <Grid>
@@ -210,22 +216,30 @@ class Playfield extends Component {
                                         <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
                                         <Graveyard cards={this.state.graveYard} />
                                     </Col>
-                                    <Col className='lands-container no-padding no-margin' xs={9} sm={9} md={9} lg={9}>
-                                        <Lands lands={this.state.lands} addMana={this.ManaGenerated.bind(this)} />
+                                    <Col className='no-padding no-margin' xs={9} sm={9} md={9} lg={9}>
+                                        <Col className='lands-container no-padding no-margin' xs={12} sm={12} md={12} lg={12}>
+                                            <Lands lands={this.state.lands} addMana={this.ManaGenerated.bind(this)} />
+                                        </Col>
+                                        <Col className='no-padding no-margin' xs={12} sm={12} md={12} lg={12}>
+                                            <ManaPool pool={this.state.manaPool} />
+                                        </Col>
                                     </Col>
                                 </Row>
                             </Grid>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={12} sm={12} md={12} lg={12} >
-                            <Battlefield className="col-sm-12 no-padding no-margin" cards = {this.state.battleFieldCards} cardClicked={this.battleFieldCardClicked} />
+                    <Row className="fill-area">
+                        <Col className='battlefield-cointainer' xs={12} sm={12} md={12} lg={12} >
+                            <Battlefield className="col-sm-12 no-padding no-margin" cards={this.state.battleFieldCards} cardClicked={this.battleFieldCardClicked} />
                         </Col>
                     </Row>
                 </Grid>
                 <div className='footer'>
                     <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
                 </div>
+                <Modal modalVisible={this.state.manaSelectionModalVisible}>
+                    <Col>Modal Content</Col>
+                </Modal>
             </div>
         );
     }

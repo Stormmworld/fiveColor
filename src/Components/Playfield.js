@@ -227,18 +227,15 @@ class Playfield extends Component {
                     </Col>
                     <Col className="edgeless" xs={10} sm={10} md={10} lg={10}>
                         <Col className="edgeless" xs={12} sm={12} md={12} lg={12}>
-                            <Col className="container-library-graveyard edgeless" xs={3} sm={3} md={3} lg={3}>
-                                <Col className="edgeless" xs={1} sm={1} md={1} lg={1} />
-                                <Col className="edgeless" xs={4} sm={4} md={4} lg={4} >
+                            <Col className="container-library-graveyard edgeless" xs={2} sm={2} md={2} lg={2}>
+                                <Col className="edgeless" xs={6} sm={6} md={6} lg={6} >
                                     <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
                                 </Col>
-                                <Col className="edgeless" xs={2} sm={2} md={2} lg={2} />
-                                <Col className="edgeless" xs={4} sm={4} md={4} lg={4} >
-                                <Col className="edgeless" xs={1} sm={1} md={1} lg={1} />
+                                <Col className="edgeless" xs={6} sm={6} md={6} lg={6} >
                                     <Graveyard cards={this.state.graveYard} />
                                 </Col>
                             </Col>
-                            <Col className="container-lands edgeless" xs={9} sm={9} md={9} lg={9}>
+                            <Col className="container-lands edgeless" xs={10} sm={10} md={10} lg={10}>
                                 <Lands lands={this.state.lands} addMana={this.ManaGenerated.bind(this)} />
                             </Col>
                         </Col>

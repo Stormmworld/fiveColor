@@ -1,0 +1,68 @@
+.container-phase{
+    text-align: center;
+    background-color: pink;
+}
+
+.container-subphase{
+    text-align: center;
+    background-color: lightpink;
+}
+
+.container-stack{
+    text-align: center;
+    background-color: lightgray;
+    height:100%;
+}
+
+.container-exile{
+    text-align: center;
+    background-color: lightgray;
+    height:100%;
+}
+
+.container-library-graveyard{
+    min-height: 143px !important;
+    max-height: 143px !important;
+    text-align: center;
+    background-color: magenta;
+}
+
+.container-lands{
+    min-height: 143px !important;
+    max-height: 143px !important;
+    overflow: auto;
+    text-align: center;
+    background-color: green;
+}
+
+.container-battlefield{
+    text-align: center;
+    background-color:tan;
+}
+
+.container-user{
+    text-align: center;
+    background-color: lightgreen;
+}
+
+.container-hand{
+    min-height: 143px !important;
+    max-height: 143px !important;
+    overflow: auto;
+    text-align: center;
+    background-color: gray;
+}
+
+.container-life{
+    text-align: center;
+    background-color: lightgreen;
+}
+
+.edgeless{
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.grid{
+    background-color: mediumpurple;
+}

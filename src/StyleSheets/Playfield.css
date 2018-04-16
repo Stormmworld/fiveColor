@@ -20,19 +20,6 @@
     overflow: auto;
 }
 
-.no-padding {
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.bottom-margin {
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-}
 
 .card-size-minimum{
     min-width:120px;
@@ -41,7 +28,7 @@
     max-height:150px;    
 }
 
-.playfield-container{
+.fill-area{
     display: inline-flex;
     height: 100%;
 }

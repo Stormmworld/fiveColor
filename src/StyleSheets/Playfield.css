@@ -1,34 +1,69 @@
-.maxWidth{
-    width: 100%
-}
-
-.footer {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   text-align: center;
-}
-
-.align-center{
-    align-content: center;
+.container-phase{
+    min-height: 40px !important;
+    max-height: 40px !important;
     text-align: center;
+    background-color: pink;
+}
+.container-active-player{
+    min-height: 40px !important;
+    max-height: 40px !important;
+    text-align: center;
+    background-color: lightgray;
 }
 
-.cardheight{
-    max-height: 143px;
+.container-stack{
+    text-align: center;
+    background-color: lightgray;
+}
+
+.container-exile{
+    text-align: center;
+    background-color: lightgray;
+}
+
+.container-library-graveyard{
+    min-height: 143px !important;
+    max-height: 143px !important;
+    text-align: center;
+    background-color:silver;
+}
+
+.container-lands{
+    min-height: 143px !important;
+    max-height: 143px !important;
     overflow: auto;
+    text-align: center;
+    background-color: green;
 }
 
-
-.card-size-minimum{
-    min-width:120px;
-    min-height:150px;
-    max-width:120px;
-    max-height:150px;    
+.container-battlefield{
+    text-align: center;
+    background-color:tan;
 }
 
-.fill-area{
-    display: inline-flex;
-    height: 100%;
+.container-manapool{
+    text-align: center;
+    background-color: lightgreen;
+    min-height: 143px !important;
+    max-height: 143px !important;
+}
+
+.container-hand{
+    min-height: 143px !important;
+    max-height: 143px !important;
+    overflow: auto;
+    text-align: center;
+    background-color: gray;
+}
+
+.container-life{
+    text-align: center;
+    background-color: lightgreen;
+    min-height: 143px !important;
+    max-height: 143px !important;
+}
+
+.edgeless{
+    padding: 0px !important;
+    margin: 0px !important;
 }

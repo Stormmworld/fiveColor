@@ -1,8 +1,7 @@
-#graveyard-container{
-    position: relative;
-    width: 100px;
-    height: 139px;
-}
-.graveYardTopCard{
+.graveyard-image {
+    background-size: contain;
     opacity: 0.4;
+    color:darkgrey;
+    background-repeat: no-repeat;
+    line-height: 143px;
 }

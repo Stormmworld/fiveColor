@@ -27,13 +27,11 @@ class Hand extends Component {
 
     render() {
         return (
-            <Grid>
-                <Row className='hand-container'>
+            <Col className='hand-container' xs={12} sm={12} md={12} lg={12}>
                 {this.props.hand ? this.props.hand.map(card => (
-                    <Card card={card} cardClicked={this.props.cardClicked}/>
+                    <Card card={card} cardClicked={this.props.cardClicked} />
                 )) : null}
-                </Row>
-            </Grid>
+            </Col>
         );
     }
 }

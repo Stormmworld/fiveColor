@@ -1,9 +1,13 @@
 .container-phase{
+    min-height: 20px !important;
+    max-height: 20px !important;
     text-align: center;
     background-color: pink;
 }
 
 .container-subphase{
+    min-height: 20px !important;
+    max-height: 20px !important;
     text-align: center;
     background-color: lightpink;
 }
@@ -11,13 +15,11 @@
 .container-stack{
     text-align: center;
     background-color: lightgray;
-    height:100%;
 }
 
 .container-exile{
     text-align: center;
     background-color: lightgray;
-    height:100%;
 }
 
 .container-library-graveyard{
@@ -40,9 +42,11 @@
     background-color:tan;
 }
 
-.container-user{
+.container-manapool{
     text-align: center;
     background-color: lightgreen;
+    min-height: 143px !important;
+    max-height: 143px !important;
 }
 
 .container-hand{
@@ -56,13 +60,11 @@
 .container-life{
     text-align: center;
     background-color: lightgreen;
+    min-height: 143px !important;
+    max-height: 143px !important;
 }
 
 .edgeless{
     padding: 0px !important;
     margin: 0px !important;
-}
-
-.grid{
-    background-color: mediumpurple;
 }

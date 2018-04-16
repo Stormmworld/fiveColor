@@ -5,6 +5,9 @@
 .CardTapped{
     opacity: 0.4;
 }
-img{
-    width:100px;
+
+.card-size{
+    height:139px !important;
+    width:100px !important;
 }
+

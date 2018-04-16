@@ -1,16 +1,16 @@
 import React from 'react';
+import { Col } from 'react-bootstrap'
 import '../StyleSheets/Graveyard.css';
 
 const Graveyard = (props) => {
-    let graveYardImage = 'https://media.istockphoto.com/vectors/blank-tombstone-vector-id472277479';
+    let graveYardImage = 'url(https://media.istockphoto.com/vectors/blank-tombstone-vector-id472277479)';
     if (props.cards && props.cards.length > 0)
-        graveYardImage = props.cards[props.cards.length - 1].image;
+        graveYardImage = 'url(' + props.cards[props.cards.length - 1].image + ')';
 
     return (
-        <div id="graveyard-container col-sm-1 no-padding no-margin" >
-            <img className="graveYardTopCard" src={graveYardImage} alt=''></img>
-            <div className="no-padding  no-margin align-center">({props.cards ? props.cards.length : '0'}) Cards</div>
-        </div>
+        <Col className="edgeless card-size graveyard-image" style={{ 'background-image': graveYardImage }} xs={12} sm={12} md={12} lg={12}>
+            <span>({props.cards ? props.cards.length : '0'}) Cards</span>
+        </Col>
     );
 }
 export default Graveyard;

@@ -4,7 +4,6 @@ import './index.css';
 import AppContainer from './Containers/AppContainer';
 import registerServiceWorker from './registerServiceWorker';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import store from './Redux/store';
 import { Provider } from 'react-redux';
  

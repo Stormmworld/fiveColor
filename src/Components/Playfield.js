@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap'
-import Modal from './Modal.js'
 import '../StyleSheets/Playfield.css';
+import * as phasefunctions from '../Scripts/Phases.js'
+import * as stackfunctions from '../Scripts/Stack.js'
 import Battlefield from './BattleField.js'
 import Library from './Library.js'
 import Graveyard from './Graveyard.js'
 import Lands from './Lands.js'
 import Hand from './Hand.js'
 import Phases from './Phases.js'
+import Stack from './Stack.js'
 import ManaPool from './ManaPool.js'
 import VitalStats from './VitalStats.js'
+import ModalComponent from './ModalComponent.js'
 
 class Playfield extends Component {
     constructor(props) {
@@ -30,10 +33,12 @@ class Playfield extends Component {
             manaPool: [],
             battleFieldCards: [],
             deckName: this.props.deckName,
-            currentPlayer:{
-                Name:'test user',
+            currentPlayer: {
+                Name: 'test user',
                 Life: 20
-            }
+            },
+            stack: [],
+            showManaSelectionModal: false
         }
     };
 
@@ -48,12 +53,11 @@ class Playfield extends Component {
         window.removeEventListener("resize", this.updateHeights.bind(this));
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.deck.length < 1)
-        {
+        if (this.props.deck.length < 1) {
             this.setState(
                 {
-                     deck: this.shuffleDeck(nextProps.deck.Cards, 3) ,
-                     deckName: nextProps.deck.Name,
+                    deck: this.shuffleDeck(nextProps.deck.Cards, 3),
+                    deckName: nextProps.deck.Name,
                 }
             )
         }
@@ -61,16 +65,19 @@ class Playfield extends Component {
 
     //Event Handlers
     battleFieldCardClicked(card) {
-        alert('the card ' + card.Name + ' was clicked in the battlefield')
+        if(card.ManaProduction)
+            this.ManaGenerated(card);
     }
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;
+        var landsPlayedThisTurn = this.state.landsPlayedThisTurn;
         var currentLands = this.state.lands;
-        var currentBattlefield = this.state.battleFieldCards;
+        var currentStack = this.state.stack;
         var cardIndex = currentHand.findIndex(o => o.Name === card.Name);
         if (card.Types.find(o => o === 'Land')) {
             if (this.state.landsPlayedThisTurn < this.state.landsPerTurn) {
                 //alert(cardIndex);
+                landsPlayedThisTurn++;
                 currentHand.splice(cardIndex, 1);
                 currentLands.push(card);
             }
@@ -79,28 +86,32 @@ class Playfield extends Component {
         }
         else if (this.manaPoolSupportsCastingCost(card.ManaCost)) {//verify enough mana has been collected of the appropriate type before proceeding
             currentHand.splice(cardIndex, 1);
-            currentBattlefield.push(card);
+            currentStack.push(card);
         }
 
         this.setState({
             hand: currentHand,
             lands: currentLands,
-            battleFieldCards: currentBattlefield
+            landsPlayedThisTurn: landsPlayedThisTurn,
+            stack: currentStack
         });
     }
     ManaGenerated(manaProducer) {
         var currentManaPool = this.state.manaPool;
         if (manaProducer.ManaProduction.length === 1) {
-            currentManaPool.push(manaProducer.ManaProduction[0]);
+            for(var i = 0;i < manaProducer.ManaProduction[0].Quantity;i++)
+                currentManaPool.push(manaProducer.ManaProduction[0].ManaType);
+            this.setState({ manaPool: currentManaPool });
         }
         else if (manaProducer.ManaProduction.length > 1) {
-            alert('learn about modals and launch mana selection')
+            this.setState({
+                 showManaSelectionModal: true,
+                });
         }
-        this.setState({ manaPool: currentManaPool });
     }
-    manaSelected(colors) {
-        alert(colors);
-    }
+    // manaSelected(colors) {
+    //     alert(colors);
+    // }
 
     //Functions
     Death() {
@@ -147,6 +158,20 @@ class Playfield extends Component {
         }
         return false;
     }
+    manaSelectionclosed(){
+        this.setState({showManaSelectionModal:false});
+    }
+    manaSelected(){
+        this.manaSelectionclosed();
+    }
+    resolveStack(){
+        var resolution = stackfunctions.ResolveStack(this.state.stack, this.state.battleFieldCards, this.state.graveYard);
+        this.setState({
+            stack:resolution.Stack,
+            battleFieldCards:resolution.BattleField, 
+            graveYard:resolution.Graveyard
+        });
+    }
     shuffleDeck(deck, shuffleCount) {
         var shuffledCards = [];
         var loopCount = deck.length;
@@ -159,62 +184,11 @@ class Playfield extends Component {
         return shuffleCount === 0 ? shuffledCards : this.shuffleDeck(shuffledCards, shuffleCount - 1);
     }
     StepCompleted() {
-        var currentPhase = this.state.phase;
-        var currentSubphase = this.state.subphase;
-        var currentLandsPlayedThisTurn = this.state.landsPlayedThisTurn;
-
-        switch (this.state.phase) {
-            case 'beginning':
-                switch (this.state.subphase) {
-                    case 'untap':
-                        currentSubphase = 'upkeep';
-                        break;
-                    case 'upkeep':
-                        currentSubphase = 'draw';
-                        break;
-                    case 'draw':
-                        currentPhase = 'main1';
-                        currentSubphase = null;
-                        break;
-                }
-                break;
-            case 'main1':
-                currentPhase = 'combat';
-                currentSubphase = 'attack-declaration';
-                break;
-            case 'combat':
-                switch (this.state.subphase) {
-                    case 'attack-declaration':
-                        currentSubphase = 'defense-declaration';
-                        break;
-                    case 'defense-declaration':
-                        currentSubphase = 'damage-resolution';
-                        break;
-                    case 'damage-resolution':
-                        currentPhase = 'main2';
-                        currentSubphase = null;
-                        break;
-                }
-                break;
-            case 'main2':
-                currentPhase = 'discard';
-                break;
-            case 'discard':
-                currentPhase = 'ending';
-                break;
-            case 'ending':
-                currentPhase = 'opponents-turn';
-                break;
-            case 'opponents-turn':
-                currentPhase = 'beginning';
-                currentSubphase = 'untap';
-                currentLandsPlayedThisTurn = 0;
-                break;
-        }
+        var phaseData = phasefunctions.GetNextPhaseData(this.state.phase, this.state.subphase,this.state.landsPlayedThisTurn);
         this.setState({
-            phase: currentPhase,
-            subphase: currentSubphase,
-            landsPlayedThisTurn: currentLandsPlayedThisTurn,
+            phase: phaseData.Phase,
+            subphase: phaseData.Subphase,
+            landsPlayedThisTurn: phaseData.LandsPlayedThisTurn,
         });
     }
     updateHeights() {
@@ -236,7 +210,7 @@ class Playfield extends Component {
                 </Col>
                 <Col className="edgeless" xs={12} sm={12} md={12} lg={12}>
                     <Col className="container-stack edgeless" xs={1} sm={1} md={1} lg={1} style={{ minHeight: this.state.SidebarHeight, maxHeight: this.state.SidebarHeight }}>
-                        Stack
+                        <Stack cards={this.state.stack} resolveStack={this.resolveStack.bind(this)} />
                     </Col>
                     <Col className="edgeless" xs={10} sm={10} md={10} lg={10}>
                         <Col className="edgeless" xs={12} sm={12} md={12} lg={12}>
@@ -253,7 +227,7 @@ class Playfield extends Component {
                             </Col>
                         </Col>
                         <Col className="container-battlefield edgeless" style={{ minHeight: this.state.BattleFieldHeight, maxHeight: this.state.BattleFieldHeight }} xs={12} sm={12} md={12} lg={12}>
-                            <Battlefield className="col-sm-12 no-padding no-margin" cards={this.state.battleFieldCards} cardClicked={this.battleFieldCardClicked} />
+                            <Battlefield className="col-sm-12 no-padding no-margin" cards={this.state.battleFieldCards} cardClicked={this.battleFieldCardClicked.bind(this)} />
                         </Col>
                     </Col>
                     <Col className="container-exile edgeless" xs={1} sm={1} md={1} lg={1} style={{ minHeight: this.state.SidebarHeight, maxHeight: this.state.SidebarHeight }}>Exile</Col>
@@ -266,9 +240,12 @@ class Playfield extends Component {
                         <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
                     </Col>
                     <Col className="container-life edgeless" xs={1} sm={1} md={1} lg={1}>
-                        <VitalStats lifeRemaining={this.state.currentPlayer.Life} deckName={this.state.deckName} userName={this.state.currentPlayer.Name}/>
+                        <VitalStats lifeRemaining={this.state.currentPlayer.Life} deckName={this.state.deckName} userName={this.state.currentPlayer.Name} />
                     </Col>
                 </Col>
+                <ModalComponent show={this.state.showManaSelectionModal} title='Select the Mana color To Produce' buttonText='' handleClose={this.manaSelectionclosed.bind(this)} handleButton={this.manaSelected.bind(this)}>
+                    
+                </ModalComponent>
             </Col>
         );
     }

@@ -3,6 +3,7 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import '../StyleSheets/Playfield.css';
 import * as phasefunctions from '../Scripts/Phases.js'
 import * as stackfunctions from '../Scripts/Stack.js'
+import * as cardfunctions from '../Scripts/Card.js'
 import Battlefield from './BattleField.js'
 import Library from './Library.js'
 import Graveyard from './Graveyard.js'
@@ -67,6 +68,7 @@ class Playfield extends Component {
     battleFieldCardClicked(card) {
         if(card.ManaProduction)
             this.ManaGenerated(card);
+        this.setState({battleFieldCards:cardfunctions.TapCard(this.state.battleFieldCards, card)});
     }
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;

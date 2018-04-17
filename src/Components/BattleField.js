@@ -14,7 +14,7 @@ class BattleField extends Component {
         var artifacts = [];
         if (this.props.cards)
             for (var i = 0; i < this.props.cards.length; i++) {
-                if (this.props.cards[i].Types.find(o => o === 'artifact') && !(this.props.cards[i].Types.find(o => o === 'Creature')))
+                if (this.props.cards[i].Types.find(o => o === 'Artifact') && !(this.props.cards[i].Types.find(o => o === 'Creature')))
                     artifacts.push(this.props.cards[i]);
             }
         return (
@@ -27,7 +27,7 @@ class BattleField extends Component {
         var enchantments = [];
         if (this.props.cards)
             for (var i = 0; i < this.props.cards.length; i++) {
-                if (this.props.cards[i].Types.find(o => o === 'enchantment') && !(this.props.cards[i].Types.find(o => o === 'Creature')))
+                if (this.props.cards[i].Types.find(o => o === 'Enchantment') && !(this.props.cards[i].Types.find(o => o === 'Creature')))
                     enchantments.push(this.props.cards[i]);
             }
         return (

@@ -18,7 +18,7 @@ const Reducer = function Reducer(state = initialState, action) {
       //alert(action.type);
       return {
         ...state,
-        deck: action.payload.Cards
+        deck: action.payload,
       };
     }
     case RESET_STATE: {

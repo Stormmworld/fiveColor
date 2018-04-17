@@ -9,6 +9,7 @@ import Lands from './Lands.js'
 import Hand from './Hand.js'
 import Phases from './Phases.js'
 import ManaPool from './ManaPool.js'
+import VitalStats from './VitalStats.js'
 
 class Playfield extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class Playfield extends Component {
             BattleFieldHeight: '0px',
             SidebarHeight: '0px',
             DrawCount: 1,
-            deck: this.shuffleDeck(this.props.deck, 3),
+            deck: [],
             showtopCard: false,
             hand: [],
             lands: [],
@@ -28,6 +29,11 @@ class Playfield extends Component {
             landsPerTurn: 1,
             manaPool: [],
             battleFieldCards: [],
+            deckName: this.props.deckName,
+            currentPlayer:{
+                Name:'test user',
+                Life: 20
+            }
         }
     };
 
@@ -43,7 +49,14 @@ class Playfield extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.deck.length < 1)
-            this.setState({ deck: this.shuffleDeck(nextProps.deck, 3) })
+        {
+            this.setState(
+                {
+                     deck: this.shuffleDeck(nextProps.deck.Cards, 3) ,
+                     deckName: nextProps.deck.Name,
+                }
+            )
+        }
     }
 
     //Event Handlers
@@ -253,7 +266,7 @@ class Playfield extends Component {
                         <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
                     </Col>
                     <Col className="container-life edgeless" xs={1} sm={1} md={1} lg={1}>
-                        Life Stats
+                        <VitalStats lifeRemaining={this.state.currentPlayer.Life} deckName={this.state.deckName} userName={this.state.currentPlayer.Name}/>
                     </Col>
                 </Col>
             </Col>

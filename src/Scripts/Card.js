@@ -1,13 +1,13 @@
-export function CheckCardType(card, type){
+export function CheckCardType(card, type) {
     return card.Types.find(o => o === type);
 }
 
 export function DrawCards(drawCount, hand, deck) {
     for (var i = 0; i < drawCount; i++) {
-            var cardDrawn = deck[0];
-            hand.push(cardDrawn);
-            deck.splice(0, 1);
-        }
+        var cardDrawn = deck[0];
+        hand.push(cardDrawn);
+        deck.splice(0, 1);
+    }
     return ({
         Deck: deck,
         Hand: hand,
@@ -33,9 +33,9 @@ export function TapCard(cards, card) {
     }
     return cards;
 }
-export function UntapCards(cardData){
+export function UntapCards(cardData) {
     for (var i = 0; i < cardData.BattleFieldCards.length; i++) {
-            cardData.BattleFieldCards[i].tapped = false;
+        cardData.BattleFieldCards[i].tapped = false;
     }
     for (var i = 0; i < cardData.LandCards.length; i++) {
         cardData.LandCards[i].tapped = false;

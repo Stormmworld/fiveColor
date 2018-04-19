@@ -235,7 +235,7 @@ class Playfield extends Component {
                         <ManaPool pool={this.state.manaPool} />
                     </Col>
                     <Col className="container-hand edgeless" xs={10} sm={10} md={10} lg={10}>
-                        <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} cardClicked={this.CardClickedFromHand.bind(this)} />
+                        <Hand hand={this.state.hand} phase={this.state.phase} subphase={this.state.subphase} stackActive={(this.state.stack.length > 0)} cardClicked={this.CardClickedFromHand.bind(this)} />
                     </Col>
                     <Col className="container-life edgeless" xs={1} sm={1} md={1} lg={1}>
                         <VitalStats lifeRemaining={this.state.currentPlayer.Life} deckName={this.state.deckName} userName={this.state.currentPlayer.Name} />

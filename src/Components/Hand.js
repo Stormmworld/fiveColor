@@ -8,14 +8,13 @@ class Hand extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            phase: this.props.phase,
             MaxHandSize: 7,
             hand: this.props.hand,
         }
     };
 
     componentWillReceiveProps(nextprops){
-        var activeHand = phasefunctions.ActiveCards(nextprops.hand,nextprops.phase);
+        var activeHand = phasefunctions.ActiveCards(nextprops.hand,nextprops.phase,nextprops.stackActive);
         this.state = {
             phase: nextprops.phase,
             MaxHandSize: 7,

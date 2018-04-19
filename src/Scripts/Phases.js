@@ -57,9 +57,9 @@ export function GetNextPhaseData(phase, subphase, landsPlayedThisTurn) {
     return retVal;
 }
 
-export function ActiveCards(hand,phase){
+export function ActiveCards(hand,phase,stackActive){
     for(var i = 0; i < hand.length;i++){
-        hand[i].fadeout = (phase === 'main' || cardfunctions.CheckCardType(hand[i],'instant') || cardfunctions.CheckCardType(hand[i],'interrupt'));
+        hand[i].enabled = ((phase === 'main' && !stackActive) || cardfunctions.CheckCardType(hand[i],'Instant') || cardfunctions.CheckCardType(hand[i],'Interrupt'));
     }
     return hand;
 }

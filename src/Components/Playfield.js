@@ -4,6 +4,7 @@ import '../StyleSheets/Playfield.css';
 import * as phasefunctions from '../Scripts/Phases.js'
 import * as stackfunctions from '../Scripts/Stack.js'
 import * as cardfunctions from '../Scripts/Card.js'
+import * as manapoolfunctions from '../Scripts/ManaPool.js'
 import Battlefield from './BattleField.js'
 import Library from './Library.js'
 import Graveyard from './Graveyard.js'
@@ -13,7 +14,8 @@ import Phases from './Phases.js'
 import Stack from './Stack.js'
 import ManaPool from './ManaPool.js'
 import VitalStats from './VitalStats.js'
-import ModalComponent from './ModalComponent.js'
+import ManaSelectionModal from './ManaSelectionModal.js'
+import DiscardModal from './DiscardModal.js'
 
 class Playfield extends Component {
     constructor(props) {
@@ -39,7 +41,8 @@ class Playfield extends Component {
                 Life: 20
             },
             stack: [],
-            showManaSelectionModal: false
+            showManaSelectionModal: false,
+            manaSelectionCard: null
         }
     };
 
@@ -55,10 +58,12 @@ class Playfield extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.deck.length < 1) {
+            var cardData = cardfunctions.DrawCards(7, [], cardfunctions.shuffleDeck(nextProps.deck.Cards, 3))
             this.setState(
                 {
-                    deck: this.shuffleDeck(nextProps.deck.Cards, 3),
                     deckName: nextProps.deck.Name,
+                    deck: cardData.Deck,
+                    hand: cardData.Hand,
                 }
             )
         }
@@ -66,9 +71,9 @@ class Playfield extends Component {
 
     //Event Handlers
     battleFieldCardClicked(card) {
-        if(card.ManaProduction)
+        if (card.ManaProduction)
             this.ManaGenerated(card);
-        this.setState({battleFieldCards:cardfunctions.TapCard(this.state.battleFieldCards, card)});
+        this.setState({ battleFieldCards: cardfunctions.TapCard(this.state.battleFieldCards, card) });
     }
     CardClickedFromHand(card) {
         var currentHand = this.state.hand;
@@ -76,7 +81,7 @@ class Playfield extends Component {
         var currentLands = this.state.lands;
         var currentStack = this.state.stack;
         var cardIndex = currentHand.findIndex(o => o.Name === card.Name);
-        if (card.Types.find(o => o === 'Land')) {
+        if (cardfunctions.CheckCardType(card, 'Land')) {
             if (this.state.landsPlayedThisTurn < this.state.landsPerTurn) {
                 //alert(cardIndex);
                 landsPlayedThisTurn++;
@@ -86,9 +91,12 @@ class Playfield extends Component {
             else
                 alert('You can only play ' + this.state.landsPerTurn + ' lands per turn.');
         }
-        else if (this.manaPoolSupportsCastingCost(card.ManaCost)) {//verify enough mana has been collected of the appropriate type before proceeding
-            currentHand.splice(cardIndex, 1);
-            currentStack.push(card);
+        else {
+            if (manapoolfunctions.manaPoolSupportsCastingCost(card.ManaCost,this.state.manaPool)) {
+                currentHand.splice(cardIndex, 1);
+                currentStack.push(card);
+
+            }
         }
 
         this.setState({
@@ -98,99 +106,87 @@ class Playfield extends Component {
             stack: currentStack
         });
     }
-    ManaGenerated(manaProducer) {
-        var currentManaPool = this.state.manaPool;
-        if (manaProducer.ManaProduction.length === 1) {
-            for(var i = 0;i < manaProducer.ManaProduction[0].Quantity;i++)
-                currentManaPool.push(manaProducer.ManaProduction[0].ManaType);
-            this.setState({ manaPool: currentManaPool });
-        }
-        else if (manaProducer.ManaProduction.length > 1) {
-            this.setState({
-                 showManaSelectionModal: true,
-                });
-        }
-    }
-    // manaSelected(colors) {
-    //     alert(colors);
-    // }
-
-    //Functions
     Death() {
         alert('Game Over, you lose');
     }
-    DrawCards() {
-        var cardsDrawn = this.state.hand;
-        var currentdeck = this.state.deck;
-        for (var i = 0; i < this.state.DrawCount; i++) {
-            if (currentdeck.length === 0) {
-                //alert('You have no cards to draw');
-                this.Death();
-                break;
-            }
-            else {
-                var cardDrawn = currentdeck[0];
-                cardsDrawn.push(cardDrawn);
-                currentdeck.splice(0, 1);
-            }
-        }
+    discardSelected(hand, discard){
+        var currentGraveyard = this.state.graveYard;
+        currentGraveyard.push(discard);
         this.setState({
-            deck: currentdeck,
-            hand: cardsDrawn,
+            hand: hand,
+            graveYard: currentGraveyard,
+            showDiscardModal:false,
         });
     }
-    manaPoolSupportsCastingCost(ManaCost) {
-        for (var i = 0; i < ManaCost.length; i++) {
-            if (ManaCost[i] === "0") { return true; }
-            var requiredMana = ManaCost[i].split(',');
-            var manapool = this.state.manaPool;
-            var success = true;
-            for (var j = requiredMana.length; j > -1; j--) {
-                if (manapool.length === 0)
-                    success = false;
-                var indexOfMana = manapool.findIndex(o => o.color === requiredMana[j]);
-                if (indexOfMana) {
-                    manapool.splice(indexOfMana, 1);
-                }
-                else
-                    success = false;
-            }
-            if (success)
-                return true;
+    ManaGenerated(manaProducer) {
+        var currentManaPool = this.state.manaPool;
+        if (manaProducer.ManaProduction.length === 1) {
+            for (var i = 0; i < manaProducer.ManaProduction[0].Quantity; i++)
+                currentManaPool.push(manaProducer.ManaProduction[0].ManaType);
+            this.setState({
+                manaPool: currentManaPool
+            });
         }
-        return false;
+        else if (manaProducer.ManaProduction.length > 1) {
+            this.setState({
+                manaSelectionCard: manaProducer,
+                showManaSelectionModal: true,
+            });
+        }
     }
-    manaSelectionclosed(){
-        this.setState({showManaSelectionModal:false});
+    manaSelectionclosed(manaselected, card) {
+        var currentManapool = this.state.manaPool;
+        var currentBattlefield = this.state.battleFieldCards;
+        var currentLands = this.state.lands;
+        if (manaselected) {
+            for (var i = 0; i < manaselected.Quantity; i++)
+                currentManapool.push(manaselected.ManaType);
+            if (cardfunctions.CheckCardType(card, 'Land'))
+                currentLands = cardfunctions.TapCard(currentLands, card);
+            else
+                currentBattlefield = cardfunctions.TapCard(currentBattlefield, card);
+        }
+        this.setState({
+            showManaSelectionModal: false,
+            manaPool: currentManapool
+        });
     }
-    manaSelected(){
-        this.manaSelectionclosed();
-    }
-    resolveStack(){
+    resolveStack() {
         var resolution = stackfunctions.ResolveStack(this.state.stack, this.state.battleFieldCards, this.state.graveYard);
         this.setState({
-            stack:resolution.Stack,
-            battleFieldCards:resolution.BattleField, 
-            graveYard:resolution.Graveyard
+            stack: resolution.Stack,
+            battleFieldCards: resolution.BattleField,
+            graveYard: resolution.Graveyard
         });
     }
-    shuffleDeck(deck, shuffleCount) {
-        var shuffledCards = [];
-        var loopCount = deck.length;
-        for (var i = 0; i < loopCount; i++) {
-            var index = Math.floor(Math.random() * deck.length);
-            var card = deck[index];
-            deck.splice(index, 1);
-            shuffledCards.push(card);
-        }
-        return shuffleCount === 0 ? shuffledCards : this.shuffleDeck(shuffledCards, shuffleCount - 1);
-    }
     StepCompleted() {
-        var phaseData = phasefunctions.GetNextPhaseData(this.state.phase, this.state.subphase,this.state.landsPlayedThisTurn);
+        var currentdeck = this.state.deck;
+        var currenthand = this.state.hand;
+        var phaseData = phasefunctions.GetNextPhaseData(this.state.phase, this.state.subphase, this.state.landsPlayedThisTurn);
+        var activateDiscardModal = (phaseData.Phase === 'discard');
+        var cardData = {
+            BattleFieldCards: this.state.battleFieldCards,
+            LandCards: this.state.lands,
+        }
+
+
+        if (phaseData.Subphase === 'untap')
+            cardData = cardfunctions.UntapCards(cardData);
+        if (phaseData.Subphase === 'draw') {
+            var data = cardfunctions.DrawCards(this.state.DrawCount, currenthand, currentdeck);
+            currenthand = data.Hand;
+            currentdeck = data.Deck;
+        }
+
         this.setState({
             phase: phaseData.Phase,
             subphase: phaseData.Subphase,
             landsPlayedThisTurn: phaseData.LandsPlayedThisTurn,
+            battleFieldCards: cardData.BattleFieldCards,
+            lands: cardData.LandCards,
+            hand:currenthand,
+            deck:currentdeck,
+            showDiscardModal: activateDiscardModal,
         });
     }
     updateHeights() {
@@ -218,7 +214,7 @@ class Playfield extends Component {
                         <Col className="edgeless" xs={12} sm={12} md={12} lg={12}>
                             <Col className="container-library-graveyard edgeless" xs={2} sm={2} md={2} lg={2}>
                                 <Col className="edgeless" xs={6} sm={6} md={6} lg={6} >
-                                    <Library cards={this.state.deck} cardsDrawn={this.DrawCards.bind(this)} showTopCard={this.state.showtopCard} />
+                                    <Library cards={this.state.deck} showTopCard={this.state.showtopCard} />
                                 </Col>
                                 <Col className="edgeless" xs={6} sm={6} md={6} lg={6} >
                                     <Graveyard cards={this.state.graveYard} />
@@ -245,9 +241,8 @@ class Playfield extends Component {
                         <VitalStats lifeRemaining={this.state.currentPlayer.Life} deckName={this.state.deckName} userName={this.state.currentPlayer.Name} />
                     </Col>
                 </Col>
-                <ModalComponent show={this.state.showManaSelectionModal} title='Select the Mana color To Produce' buttonText='' handleClose={this.manaSelectionclosed.bind(this)} handleButton={this.manaSelected.bind(this)}>
-                    
-                </ModalComponent>
+                <ManaSelectionModal show={this.state.showManaSelectionModal} card={this.state.manaSelectionCard} manaSelectionclosed={this.manaSelectionclosed.bind(this)} />
+                <DiscardModal show={this.state.showDiscardModal} hand={this.state.hand} maxHandSize={this.state.maxHandSize} discardSelected={this.discardSelected.bind(this)}/>
             </Col>
         );
     }

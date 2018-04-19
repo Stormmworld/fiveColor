@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap'
+import * as phasefunctions from '../Scripts/Phases.js'
 import '../StyleSheets/Hand.css';
 import Card from './Card.js'
 
@@ -13,6 +14,14 @@ class Hand extends Component {
         }
     };
 
+    componentWillReceiveProps(nextprops){
+        var activeHand = phasefunctions.ActiveCards(nextprops.hand,nextprops.phase);
+        this.state = {
+            phase: nextprops.phase,
+            MaxHandSize: 7,
+            hand: activeHand,
+        }
+    }    
     componentWillUpdate() {
         var currentHand = this.state.hand;
         if (this.state.phase === 'discard') {

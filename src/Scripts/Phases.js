@@ -1,3 +1,5 @@
+import * as cardfunctions from '../Scripts/Card.js'
+
 export function GetNextPhaseData(phase, subphase, landsPlayedThisTurn) {
     var retVal = {
         Phase: phase,
@@ -53,4 +55,11 @@ export function GetNextPhaseData(phase, subphase, landsPlayedThisTurn) {
             break;
     }
     return retVal;
+}
+
+export function ActiveCards(hand,phase){
+    for(var i = 0; i < hand.length;i++){
+        hand[i].fadeout = (phase === 'main' || cardfunctions.CheckCardType(hand[i],'instant') || cardfunctions.CheckCardType(hand[i],'interrupt'));
+    }
+    return hand;
 }

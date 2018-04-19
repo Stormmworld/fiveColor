@@ -14,3 +14,7 @@
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
 }
+
+.card-fade{
+    opacity:.5;
+}

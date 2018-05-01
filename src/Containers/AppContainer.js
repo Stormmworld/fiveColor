@@ -5,7 +5,11 @@ import { getDeck } from '../Selectors/AppSelectors';
 
 const mapStateToProps = state => {
   return {
-    deck: getDeck(state)
+    deck: getDeck(state),
+    hubConnection: null,
+    playerName: null,
+    message: null,
+    ChatMessages: []
   };
 };
 const mapDispatchToProps = dispatch => {

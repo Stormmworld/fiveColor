@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery'; 
 import Playfield from './Playfield.js';
 //import PlayfieldLayout from './PlayfieldLayout.js';
 import WaitingRoom from './WaitingRoom';
@@ -10,11 +11,15 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const signalR = require("@aspnet/signalr");
+    $.connection.hub.url = "http://localhost:57377/signalr";
+    var hubConnection = $.connection.myHub;
+
+
+    // const signalR = require("@aspnet/signalr");
     var playerName = window.prompt('Your name:', '');
     while (playerName === '' || !playerName)
       playerName = window.prompt('Name:', '');
-    const hubConnection = new signalR.HubConnection('http://localhost:57377/signalr');
+    // const hubConnection = new signalR.HubConnection('http://localhost:57377/signalr');
 
     this.setState({ hubConnection: hubConnection, playerName: playerName }, () => {
       this.state.hubConnection

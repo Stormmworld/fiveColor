@@ -11,15 +11,19 @@ class App extends Component {
   };
 
   componentDidMount() {
-    $.connection.hub.url = "http://localhost:57377/signalr";
-    var hubConnection = $.connection.myHub;
+    //  const signalR = require("@aspnet/signalr");
+    //  const hubConnection = new signalR.HubConnection('../../public/Scripts/server.js');
+    var hubConnection = $.connection.gameHub;
+    $.connection.hub.start()
+        .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
+        .fail(function(){ console.log('Could not Connect!'); });
+    
+    
 
 
-    // const signalR = require("@aspnet/signalr");
     var playerName = window.prompt('Your name:', '');
     while (playerName === '' || !playerName)
       playerName = window.prompt('Name:', '');
-    // const hubConnection = new signalR.HubConnection('http://localhost:57377/signalr');
 
     this.setState({ hubConnection: hubConnection, playerName: playerName }, () => {
       this.state.hubConnection

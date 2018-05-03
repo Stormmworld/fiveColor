@@ -9,7 +9,7 @@ export const resetState = () => ({
 
 export function retrieveDeck(deckId) {
   return dispatch => {
-    return fetch("http://72.49.137.37/fivecolorapi/api/deck/" + deckId)//"http://localhost:54900/api/deck/1")
+    return fetch("http://72.49.137.37/fivecolorapi/api/deck/" + deckId)//"http://localhost:54900/api/deck/1") //"http://FiveColor.servehttp.com/fivecolorapi/api/deck/"
     .then((response) => {
         //alert(response;
         dispatch({

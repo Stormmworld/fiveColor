@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import $ from 'jquery'; 
 import Playfield from './Playfield.js';
 //import PlayfieldLayout from './PlayfieldLayout.js';
 import WaitingRoom from './WaitingRoom';
+const $ = window.$;
 
 class App extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class App extends Component {
 
   componentDidMount() {
     //  const signalR = require("@aspnet/signalr");
-    //  const hubConnection = new signalR.HubConnection('../../public/Scripts/server.js');
+    //  const hubConnection = new signalR.HubConnection('../Scripts/server.js');
     var hubConnection = $.connection.gameHub;
     $.connection.hub.start()
         .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
